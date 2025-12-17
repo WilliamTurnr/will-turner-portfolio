@@ -203,13 +203,33 @@
 
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
 
-    <script>
-        // --- PAGE TRANSITION ---
+  <script>
+        // --- PAGE TRANSITION (BACK BUTTON FIX) ---
         const curtain = document.querySelector('.page-transition');
-        window.onload = () => setTimeout(() => curtain.classList.add('reveal'), 100);
 
+        // This function handles the "Curtain Lift"
+        function liftCurtain() {
+            setTimeout(() => {
+                curtain.classList.add('reveal');
+            }, 100);
+        }
+
+        // 1. Run on fresh load
+        window.addEventListener('load', liftCurtain);
+
+        // 2. Run when coming back from History (Fixes the Black Screen)
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+                liftCurtain();
+            }
+        });
+
+        // Link handling (Drops the curtain when you leave)
         document.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', function(e) {
+                // Ignore if it's an external link (like Instagram)
+                if(this.target === '_blank') return;
+
                 e.preventDefault();
                 curtain.classList.remove('reveal'); 
                 const href = this.getAttribute('href');
@@ -225,7 +245,7 @@
             
             let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
             let followerX = mouseX, followerY = mouseY;
-            let currentImgUrl = null; // Track what is currently showing
+            let currentImgUrl = null; 
 
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
@@ -245,49 +265,40 @@
             }
             animateCursor();
 
-            // --- THE MORPHING FUNCTION ---
             function switchImage(newUrl) {
-                if (currentImgUrl === newUrl) return; // Don't reload if it's the same
+                if (currentImgUrl === newUrl) return; 
                 currentImgUrl = newUrl;
 
-                // 1. Create NEW Image
                 const newImg = document.createElement('img');
                 newImg.src = newUrl;
-                newImg.classList.add('img-enter'); // Fade In + Scale Down
+                newImg.classList.add('img-enter'); 
                 
-                // 2. Append to container
-                revealContainer.appendChild(newImg);
-
-                // 3. Handle OLD Images (Remove them)
-                const oldImages = revealContainer.querySelectorAll('img:not(.img-enter)');
-                oldImages.forEach(img => {
-                    img.classList.remove('img-enter');
-                    img.classList.add('img-exit'); // Fade Out + Scale Up
-                    // Wait for animation to finish, then delete from DOM
-                    setTimeout(() => {
-                        if(img.parentNode) img.parentNode.removeChild(img);
-                    }, 600);
-                });
+                if(revealContainer) {
+                    revealContainer.appendChild(newImg);
+                    const oldImages = revealContainer.querySelectorAll('img:not(.img-enter)');
+                    oldImages.forEach(img => {
+                        img.classList.remove('img-enter');
+                        img.classList.add('img-exit'); 
+                        setTimeout(() => { if(img.parentNode) img.parentNode.removeChild(img); }, 600);
+                    });
+                }
             }
 
             items.forEach(item => {
                 item.addEventListener('mouseenter', () => {
                     follower.classList.add('active');
-                    revealContainer.classList.add('visible');
-                    
-                    // Trigger the Morph
+                    if(revealContainer) revealContainer.classList.add('visible');
                     const imgUrl = item.getAttribute('data-img');
                     if(imgUrl) switchImage(imgUrl);
                 });
 
                 item.addEventListener('mouseleave', () => {
                     follower.classList.remove('active');
-                    revealContainer.classList.remove('visible');
-                    // Optional: Reset current URL so if you hover back it re-animates
-                    // currentImgUrl = null; 
+                    if(revealContainer) revealContainer.classList.remove('visible');
                 });
             });
         })();
     </script>
 </body>
 </html>
+
