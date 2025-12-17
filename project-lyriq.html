@@ -186,4 +186,41 @@
         });
 
         const container = document.querySelector('.scroll-container');
-        const progressBar =
+        const progressBar = document.querySelector('.progress-fill');
+        let currentScroll = 0; let targetScroll = 0; let maxScroll = 0;
+        let isDragging = false; let startX = 0; let dragStartScroll = 0;
+
+        function updateWidth() { maxScroll = container.scrollWidth - window.innerWidth; }
+        window.addEventListener('resize', updateWidth);
+        updateWidth();
+
+        window.addEventListener('wheel', (e) => {
+            targetScroll += e.deltaY;
+            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if(e.target.closest('.back-btn')) return;
+            isDragging = true; startX = e.pageX; dragStartScroll = targetScroll; container.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if(!isDragging) return;
+            targetScroll = dragStartScroll + (startX - e.pageX) * 2;
+            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+        });
+
+        document.addEventListener('mouseup', () => { isDragging = false; container.style.cursor = 'grab'; });
+        document.addEventListener('mouseleave', () => { isDragging = false; });
+
+        function animate() {
+            currentScroll += (targetScroll - currentScroll) * 0.08; 
+            container.style.transform = `translateX(-${currentScroll}px)`;
+            const progress = (currentScroll / maxScroll) * 100;
+            progressBar.style.width = `${progress}%`;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
