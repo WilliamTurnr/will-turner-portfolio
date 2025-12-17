@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lyriq Project | Will Turner</title>
+    <title>Project Name | Will Turner</title>
+    
     <style>
         :root {
             --bg-color: #050505;
             --text-color: #ffffff;
-            --accent: #333;
             --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             --font-mono: 'Courier New', Courier, monospace;
         }
@@ -19,34 +19,31 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: var(--font-main);
-            overflow: hidden; 
+            overflow: hidden; /* Horizontal scroll handled by JS */
             width: 100vw;
             height: 100vh;
             cursor: crosshair; 
             user-select: none; 
         }
 
-        /* --- TRANSITION CURTAIN --- */
+        /* --- PAGE TRANSITION CURTAIN --- */
         .page-transition {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
             background-color: #000;
             z-index: 99999999;
-            transform: translateY(0%); /* Starts covered */
+            transform: translateY(0%);
             transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
         }
-        .page-transition.reveal {
-            transform: translateY(-100%);
-        }
+        .page-transition.reveal { transform: translateY(-100%); }
 
-        /* --- UI LAYER --- */
+        /* --- UI LAYER (Fixed on top) --- */
         .ui-layer {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 100;
-            padding: 0;
         }
 
         .back-btn {
@@ -67,11 +64,9 @@
         }
         .back-btn:hover { background: white; color: black; }
 
+        /* Technical Crosshairs */
         .crosshair {
-            position: absolute;
-            width: 20px; height: 20px;
-            border-color: white;
-            opacity: 0.5;
+            position: absolute; width: 20px; height: 20px; border-color: white; opacity: 0.5;
         }
         .c-tl { top: 30px; left: 30px; border-top: 1px solid; border-left: 1px solid; }
         .c-tr { top: 30px; right: 30px; border-top: 1px solid; border-right: 1px solid; }
@@ -79,16 +74,11 @@
         .c-br { bottom: 30px; right: 30px; border-bottom: 1px solid; border-right: 1px solid; }
 
         .progress-track {
-            position: absolute;
-            bottom: 30px;
-            left: 60px;
-            right: 60px;
-            height: 1px;
-            background: #222;
+            position: absolute; bottom: 30px; left: 60px; right: 60px; height: 1px; background: #222;
         }
-        .progress-fill { height: 100%; background: #fff; width: 0%; }
+        .progress-fill { height: 100%; background: #fff; width: 0%; transition: width 0.1s; }
 
-        /* --- SCROLL CONTENT --- */
+        /* --- HORIZONTAL SCROLL CONTAINER --- */
         .scroll-container {
             display: flex;
             flex-wrap: nowrap;
@@ -106,20 +96,31 @@
             justify-content: center;
             padding: 0 5vw;
             flex-shrink: 0;
-            transition: opacity 0.5s;
         }
 
+        /* --- CONTENT STYLES --- */
         .title-card { width: 60vw; flex-direction: column; align-items: flex-start; justify-content: center; }
-        h1 { font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; letter-spacing: -2px; pointer-events: none; }
-        .project-details { font-family: var(--font-mono); color: #888; font-size: 0.8rem; line-height: 1.6; border-left: 1px solid #333; padding-left: 20px; pointer-events: none; }
+        h1 { font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; letter-spacing: -2px; }
+        .project-details { font-family: var(--font-mono); color: #888; font-size: 0.8rem; line-height: 1.6; border-left: 1px solid #333; padding-left: 20px; }
 
+        /* Standard Image Panel */
         .panel img {
-            max-height: 70vh; max-width: 70vw; box-shadow: 0 0 0 1px #222; pointer-events: none; 
+            max-height: 70vh; max-width: 70vw; 
+            box-shadow: 0 0 0 1px #222; 
+            pointer-events: none; 
         }
+
+        /* Full Screen Image */
         .full-bleed { padding: 0; width: 100vw; }
         .full-bleed img { width: 100%; height: 100%; object-fit: cover; max-height: 100vh; max-width: 100vw; }
+
+        /* Text Panel */
         .text-only { width: 40vw; }
-        .text-only p { font-size: 1.2rem; line-height: 1.4; color: #ccc; pointer-events: none; }
+        .text-only p { font-size: 1.2rem; line-height: 1.4; color: #ccc; }
+
+        /* Dual Image Panel */
+        .duo { width: 80vw; gap: 20px; }
+        .duo img { max-width: 45%; max-height: 60vh; }
 
     </style>
 </head>
@@ -141,62 +142,64 @@
     <div class="scroll-container">
         
         <section class="panel title-card">
-            <h1>Cadillac<br>Lyriq</h1>
+            <h1>PROJECT<br>NAME</h1>
             <div class="project-details">
                 <span style="color:white">PROJECT 01</span><br><br>
-                ROLE: INTERIOR SURFACING<br>
-                YEAR: 2022<br>
-                STATUS: PRODUCTION
+                ROLE: YOUR ROLE<br>
+                YEAR: 202X<br>
+                STATUS: CONCEPT
             </div>
         </section>
 
         <section class="panel full-bleed">
-            <img src="images/lyriq-hero.jpg" alt="Hero">
-        </section>
-
-        <section class="panel">
-            <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070" alt="Press Release">
+            <img src="images/placeholder.jpg" alt="Hero">
         </section>
 
         <section class="panel text-only">
-            <p>The challenge was maintaining the conceptual purity of the show car while meeting rigorous safety and manufacturing constraints.</p>
+            <p>The brief description of the project goes here. Focus on the problem you solved and the technical constraints.</p>
         </section>
 
         <section class="panel">
-            <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070" alt="Detail">
+            <img src="images/placeholder.jpg" alt="Process">
+        </section>
+
+        <section class="panel duo">
+            <img src="images/placeholder.jpg" alt="Detail 1">
+            <img src="images/placeholder.jpg" alt="Detail 2">
+        </section>
+
+        <section class="panel full-bleed">
+            <img src="images/placeholder.jpg" alt="Final">
         </section>
 
     </div>
 
     <script>
-        // --- PAGE TRANSITION LOGIC ---
+        // --- PAGE TRANSITION ---
         const curtain = document.querySelector('.page-transition');
+        
+        // Safety Reveal
+        if(document.readyState === 'complete') {
+            curtain.classList.add('reveal');
+        } else {
+            window.onload = () => setTimeout(() => curtain.classList.add('reveal'), 100);
+        }
 
-        // 1. REVEAL ON LOAD
-        window.onload = () => {
-            setTimeout(() => {
-                curtain.classList.add('reveal'); 
-            }, 100);
-        };
-
-        // 2. HANDLE BACK BUTTON
+        // Back Button Logic
         const backBtn = document.querySelector('.back-btn');
         backBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            curtain.classList.remove('reveal'); // Slide down
-            setTimeout(() => {
-                window.location.href = this.getAttribute('href');
-            }, 800);
+            curtain.classList.remove('reveal'); // Drop curtain
+            setTimeout(() => window.location.href = this.getAttribute('href'), 800);
         });
 
-        // --- SCROLL LOGIC ---
+        // --- HORIZONTAL SCROLL PHYSICS ---
         const container = document.querySelector('.scroll-container');
         const progressBar = document.querySelector('.progress-fill');
         
         let currentScroll = 0;
         let targetScroll = 0;
         let maxScroll = 0;
-        let skew = 0;
         let isDragging = false;
         let startX = 0;
         let dragStartScroll = 0;
@@ -205,11 +208,13 @@
         window.addEventListener('resize', updateWidth);
         updateWidth();
 
+        // Mouse Wheel
         window.addEventListener('wheel', (e) => {
             targetScroll += e.deltaY;
             targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
         });
 
+        // Drag Logic
         document.addEventListener('mousedown', (e) => {
             if(e.target.closest('.back-btn')) return;
             isDragging = true;
@@ -220,7 +225,7 @@
 
         document.addEventListener('mousemove', (e) => {
             if(!isDragging) return;
-            const walk = (startX - e.pageX) * 1.5; 
+            const walk = (startX - e.pageX) * 2; // Speed multiplier
             targetScroll = dragStartScroll + walk;
             targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
         });
@@ -228,15 +233,15 @@
         document.addEventListener('mouseup', () => { isDragging = false; container.style.cursor = 'grab'; });
         document.addEventListener('mouseleave', () => { isDragging = false; });
 
+        // Animation Loop
         function animate() {
-            const diff = targetScroll - currentScroll;
-            currentScroll += diff * 0.08;
-            let rawSkew = diff * 0.005; 
-            skew = Math.max(-2, Math.min(rawSkew, 2));
-
-            container.style.transform = `translateX(-${currentScroll}px) skewX(${-skew}deg)`;
+            currentScroll += (targetScroll - currentScroll) * 0.08; // Smoothness factor
+            container.style.transform = `translateX(-${currentScroll}px)`;
+            
+            // Progress Bar
             const progress = (currentScroll / maxScroll) * 100;
             progressBar.style.width = `${progress}%`;
+            
             requestAnimationFrame(animate);
         }
         animate();
