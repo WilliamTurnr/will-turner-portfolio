@@ -1,140 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lyriq + Optiq | Will Turner</title>
-    
-    <style>
-        :root {
-            --bg-color: #050505;
-            --text-color: #ffffff;
-            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            --font-mono: 'Courier New', Courier, monospace;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-main);
-            overflow: hidden; 
-            width: 100vw;
-            height: 100vh;
-            cursor: crosshair; 
-            user-select: none; 
-        }
-
-        /* --- PAGE TRANSITION --- */
-        .page-transition {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #000;
-            z-index: 99999999;
-            transform: translateY(0%);
-            transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
-            pointer-events: none; 
-        }
-        .page-transition.reveal { transform: translateY(-100%); }
-
-        /* --- UI LAYER --- */
-        .ui-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 100;
-        }
-
-        .back-btn {
-            pointer-events: auto;
-            text-decoration: none;
-            color: white;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 8px 16px;
-            border-radius: 2px;
-            transition: all 0.3s;
-            background: rgba(0,0,0,0.5);
-            cursor: pointer;
-            position: absolute;
-            top: 45px; left: 45px;
-        }
-        .back-btn:hover { background: white; color: black; }
-
-        .progress-track {
-            position: absolute; bottom: 30px; left: 60px; right: 60px; height: 1px; background: #222;
-        }
-        .progress-fill { height: 100%; background: #fff; width: 0%; transition: width 0.1s; }
-
-        /* --- SCROLL CONTAINER --- */
-        .scroll-container {
-            display: flex;
-            flex-wrap: nowrap;
-            height: 100vh;
-            width: fit-content;
-            will-change: transform;
-            cursor: grab;
-        }
-        .scroll-container:active { cursor: grabbing; }
-
-        .panel {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 5vw;
-            flex-shrink: 0;
-        }
-
-        /* --- CONTENT STYLES --- */
-        .title-card { width: 60vw; flex-direction: column; align-items: flex-start; justify-content: center; }
-        h1 { font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; letter-spacing: -2px; }
-        .project-details { font-family: var(--font-mono); color: #888; font-size: 0.8rem; line-height: 1.6; border-left: 1px solid #333; padding-left: 20px; }
-
-        /* Press Photos */
-        .panel img {
-            max-height: 70vh; max-width: 70vw; 
-            box-shadow: 0 0 0 1px #222; 
-            pointer-events: none; 
-        }
-
-        /* Full Bleed */
-        .full-bleed { padding: 0; width: 100vw; }
-        .full-bleed img { width: 100%; height: 100%; object-fit: cover; max-height: 100vh; max-width: 100vw; }
-
-        /* Text/Press Block */
-        .text-only { width: 45vw; }
-        .text-only h2 { font-size: 2rem; margin-bottom: 20px; text-transform: uppercase; color: white; }
-        .text-only p { font-size: 1.1rem; line-height: 1.5; color: #aaa; margin-bottom: 30px; }
-        
-        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-top: 1px solid #333; padding-top: 20px; }
-        .stat-item h3 { font-size: 1.5rem; color: white; margin-bottom: 5px; }
-        .stat-item span { font-family: var(--font-mono); font-size: 0.7rem; color: #666; text-transform: uppercase; }
-
-        /* Quote Block */
-        .quote-block { font-size: 1.4rem; font-style: italic; color: #fff; border-left: 2px solid white; padding-left: 20px; margin-bottom: 20px; }
-        .quote-source { font-family: var(--font-mono); font-size: 0.8rem; color: #666; font-style: normal; }
-
-        /* --- INSTAGRAM GRID --- */
-        .insta-row { 
-            width: 80vw; 
-            gap: 30px; 
-            align-items: center;
-        }
-        .insta-row img {
-            max-width: 30%; 
-            max-height: 60vh; 
-            border: 1px solid #333;
-            border-radius: 8px; 
-            object-fit: cover;
-        }
-
-    </style>
-</head>
 <body>
 
     <div class="page-transition"></div>
@@ -150,9 +13,9 @@
             <h1>LYRIQ +<br>OPTIQ</h1>
             <div class="project-details">
                 <span style="color:white">MEDIA IMPACT</span><br><br>
-                ROLE: PRODUCTION SURFACING<br>
-                COMPONENTS: MFC, STALKS, SWITCHGEAR<br>
-                AWARD: WARDS 10 BEST INTERIORS
+                ROLE: LEAD COMPONENT DESIGNER<br>
+                SCOPE: MFC, STALKS, DOOR SWITCHES<br>
+                RESULT: WARDS 10 BEST INTERIORS
             </div>
         </section>
 
@@ -162,12 +25,12 @@
 
         <section class="panel text-only">
             <h2>The Jewel Box</h2>
-            <p>Designed the primary driver touchpoints: the crystal MFC controller, wiper/shifter stalks, and window switches. The goal was to bridge the digital experience with tactile, mechanical luxury.</p>
+            <p>Designed the primary driver touchpoints: the crystal MFC controller, wiper/shifter stalks, and window switches. The challenge was to bridge the digital experience with tactile, mechanical luxury.</p>
             
             <div class="stat-grid">
                 <div class="stat-item">
-                    <h3>20,000+</h3>
-                    <span>Units Sold (2024 YTD)</span>
+                    <h3>28,400+</h3>
+                    <span>Units Sold (2024)</span>
                 </div>
                 <div class="stat-item">
                     <h3>75%</h3>
@@ -176,8 +39,28 @@
             </div>
         </section>
 
+        <section class="panel text-only" style="border-left: 1px solid #333; padding-left: 40px;">
+            <h2 style="color: #666; font-size: 1rem; letter-spacing: 2px;">FROM SKETCH TO TOOLING</h2>
+            <br>
+            <p style="color: white; font-size: 1.4rem;">The "Impossible" Rotary</p>
+            <p>The MFC (Multi-Function Controller) required coordinating 5 active hot-keys on a single force-sensing haptic surface. I led the DFM (Design for Manufacturing) process, working directly with electrical engineering to package the haptic actuators inside the floating cantilever console.</p>
+            <br>
+            <div class="stat-grid" style="border-top: none;">
+                <div class="stat-item">
+                    <h3 style="font-size: 1rem; color:#888;">TIMELINE</h3>
+                    <span style="color: white; font-size: 1.2rem;">-9 Months</span><br>
+                    <span style="font-size: 0.6rem;">Schedule Reduction</span>
+                </div>
+                <div class="stat-item">
+                    <h3 style="font-size: 1rem; color:#888;">COMPLEXITY</h3>
+                    <span style="color: white; font-size: 1.2rem;">Class-A Glass</span><br>
+                    <span style="font-size: 0.6rem;">Backlit Crystal Integration</span>
+                </div>
+            </div>
+        </section>
+
         <section class="panel">
-            <img src="images/lyriq-press-1.jpg" alt="Detail Shot">
+            <img src="images/lyriq-press-1.jpg" alt="MFC Detail Shot">
         </section>
 
         <section class="panel text-only">
@@ -186,7 +69,7 @@
             </div>
             <div class="quote-source">— WARDS AUTO, 10 BEST INTERIORS AWARD</div>
             <br><br>
-            <p>Featured in the Super Bowl "ScissorHands" campaign (100M+ views) and Top Gear's "Best Luxury EV" shortlist.</p>
+            <p>Featured in the Super Bowl "ScissorHands" campaign (100M+ views) and praised for bringing "Soul" back to the EV cabin.</p>
         </section>
 
         <section class="panel insta-row">
@@ -202,14 +85,12 @@
     </div>
 
     <script>
-        // --- SAFETY REVEAL ---
         const curtain = document.querySelector('.page-transition');
         function forceReveal() { curtain.classList.add('reveal'); }
         document.addEventListener('DOMContentLoaded', () => { setTimeout(forceReveal, 50); });
         window.addEventListener('load', forceReveal);
         window.addEventListener('pageshow', forceReveal);
 
-        // --- BACK BUTTON ---
         const backBtn = document.querySelector('.back-btn');
         backBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -217,7 +98,6 @@
             setTimeout(() => window.location.href = this.getAttribute('href'), 800);
         });
 
-        // --- SCROLL PHYSICS ---
         const container = document.querySelector('.scroll-container');
         const progressBar = document.querySelector('.progress-fill');
         let currentScroll = 0; let targetScroll = 0; let maxScroll = 0;
@@ -259,4 +139,3 @@
         animate();
     </script>
 </body>
-</html>
