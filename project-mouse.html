@@ -1,8 +1,15 @@
-<style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Mouse | Will Turner</title>
+    
+    <style>
         :root {
-            /* LIGHT MODE VARIABLES */
-            --bg-color: #ffffff;
-            --text-color: #000000;
+            /* --- LIGHT MODE SETTINGS --- */
+            --bg-color: #ffffff;       /* White Background */
+            --text-color: #000000;     /* Black Text */
             --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             --font-mono: 'Courier New', Courier, monospace;
         }
@@ -40,14 +47,15 @@
             z-index: 100;
         }
 
+        /* DARK BUTTON FOR LIGHT BACKGROUND */
         .back-btn {
             pointer-events: auto;
             text-decoration: none;
-            color: black; /* Dark Text */
+            color: black;
             font-family: var(--font-mono);
             font-size: 0.8rem;
             text-transform: uppercase;
-            border: 1px solid rgba(0,0,0,0.2); /* Dark Border */
+            border: 1px solid rgba(0,0,0,0.3);
             padding: 8px 16px;
             border-radius: 2px;
             transition: all 0.3s;
@@ -58,10 +66,10 @@
         }
         .back-btn:hover { background: black; color: white; }
 
-        /* Technical Crosshairs */
+        /* DARK CROSSHAIRS */
         .crosshair {
             position: absolute; width: 20px; height: 20px; 
-            border-color: black; /* Dark Crosshairs */
+            border-color: black; 
             opacity: 0.3;
         }
         .c-tl { top: 30px; left: 30px; border-top: 1px solid; border-left: 1px solid; }
@@ -69,13 +77,14 @@
         .c-bl { bottom: 30px; left: 30px; border-bottom: 1px solid; border-left: 1px solid; }
         .c-br { bottom: 30px; right: 30px; border-bottom: 1px solid; border-right: 1px solid; }
 
+        /* DARK PROGRESS BAR */
         .progress-track {
             position: absolute; bottom: 30px; left: 60px; right: 60px; height: 1px; 
-            background: #e0e0e0; /* Light Grey Track */
+            background: #e0e0e0;
         }
         .progress-fill { 
             height: 100%; 
-            background: #000; /* Black Fill */
+            background: #000; 
             width: 0%; transition: width 0.1s; 
         }
 
@@ -104,17 +113,17 @@
         h1 { font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; letter-spacing: -2px; }
         .project-details { 
             font-family: var(--font-mono); 
-            color: #555; /* Darker Grey Text */
+            color: #555; 
             font-size: 0.8rem; 
             line-height: 1.6; 
-            border-left: 1px solid #ccc; /* Light Grey Border */
+            border-left: 1px solid #000; /* Dark Border */
             padding-left: 20px; 
         }
 
         /* Standard Image Panel */
         .panel img {
             max-height: 70vh; max-width: 70vw; 
-            box-shadow: 0 0 0 1px #ddd; /* Light Border around images */
+            box-shadow: 0 0 0 1px #ddd; 
             pointer-events: none; 
         }
 
@@ -131,3 +140,138 @@
         .duo img { max-width: 45%; max-height: 60vh; }
 
     </style>
+</head>
+<body>
+
+    <div class="page-transition"></div>
+
+    <div class="ui-layer">
+        <a href="index.html" class="back-btn">← Index</a>
+        <div class="crosshair c-tl"></div>
+        <div class="crosshair c-tr"></div>
+        <div class="crosshair c-bl"></div>
+        <div class="crosshair c-br"></div>
+        <div class="progress-track">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="scroll-container">
+        
+        <section class="panel title-card">
+            <h1>APPLE<br>MOUSE</h1>
+            <div class="project-details">
+                <span style="color:black">PROJECT 03</span><br><br>
+                ROLE: CONCEPT<br>
+                YEAR: 2018<br>
+                STATUS: RENDER
+            </div>
+        </section>
+
+        <section class="panel full-bleed">
+            <img src="images/placeholder.jpg" alt="Hero">
+        </section>
+
+        <section class="panel text-only">
+            <p>An exploration of ergonomics and minimalism. The goal was to reduce the Magic Mouse to its essential form while improving grip.</p>
+        </section>
+
+        <section class="panel">
+            <img src="images/placeholder.jpg" alt="Process">
+        </section>
+
+        <section class="panel duo">
+            <img src="images/placeholder.jpg" alt="Detail 1">
+            <img src="images/placeholder.jpg" alt="Detail 2">
+        </section>
+
+        <section class="panel full-bleed">
+            <img src="images/placeholder.jpg" alt="Final">
+        </section>
+
+    </div>
+
+    <script>
+        // --- PAGE TRANSITION & BACK BUTTON FIX ---
+        const curtain = document.querySelector('.page-transition');
+
+        // FORCE Reveal Function
+        function forceReveal() {
+            requestAnimationFrame(() => {
+                curtain.classList.add('reveal');
+            });
+        }
+
+        // 1. Initial Load
+        window.addEventListener('load', () => {
+            setTimeout(forceReveal, 100);
+        });
+
+        // 2. Browser Back Button (The "Nuclear" Fix)
+        window.addEventListener('pageshow', () => {
+            forceReveal();
+        });
+
+        // Back Button Logic
+        const backBtn = document.querySelector('.back-btn');
+        backBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            curtain.classList.remove('reveal'); // Drop curtain
+            setTimeout(() => window.location.href = this.getAttribute('href'), 800);
+        });
+
+        // --- HORIZONTAL SCROLL PHYSICS ---
+        const container = document.querySelector('.scroll-container');
+        const progressBar = document.querySelector('.progress-fill');
+        
+        let currentScroll = 0;
+        let targetScroll = 0;
+        let maxScroll = 0;
+        let isDragging = false;
+        let startX = 0;
+        let dragStartScroll = 0;
+
+        function updateWidth() { maxScroll = container.scrollWidth - window.innerWidth; }
+        window.addEventListener('resize', updateWidth);
+        updateWidth();
+
+        // Mouse Wheel
+        window.addEventListener('wheel', (e) => {
+            targetScroll += e.deltaY;
+            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+        });
+
+        // Drag Logic
+        document.addEventListener('mousedown', (e) => {
+            if(e.target.closest('.back-btn')) return;
+            isDragging = true;
+            startX = e.pageX;
+            dragStartScroll = targetScroll;
+            container.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if(!isDragging) return;
+            const walk = (startX - e.pageX) * 2; 
+            targetScroll = dragStartScroll + walk;
+            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+        });
+
+        document.addEventListener('mouseup', () => { isDragging = false; container.style.cursor = 'grab'; });
+        document.addEventListener('mouseleave', () => { isDragging = false; });
+
+        // Animation Loop
+        function animate() {
+            currentScroll += (targetScroll - currentScroll) * 0.08; 
+            container.style.transform = `translateX(-${currentScroll}px)`;
+            
+            // Progress Bar
+            const progress = (currentScroll / maxScroll) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
