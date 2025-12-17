@@ -1,4 +1,205 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will Turner | Industrial Design</title>
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #ffffff;
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+
+        /* RESET */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            cursor: default; 
+            /* Native Smooth Scroll */
+            scroll-behavior: smooth;
+        }
+
+        a { text-decoration: none; color: inherit; cursor: pointer; }
+
+        /* --- PAGE TRANSITION CURTAIN --- */
+        .page-transition {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000;
+            z-index: 99999999;
+            transform: translateY(0%);
+            transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        .page-transition.reveal { transform: translateY(-100%); }
+
+        /* --- CURSOR --- */
+        .cursor-follower {
+            position: fixed;
+            top: 0; left: 0;
+            width: 20px; height: 20px;
+            background: white; 
+            border-radius: 50%;
+            pointer-events: none; 
+            mix-blend-mode: difference; 
+            z-index: 2147483647; 
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+            will-change: transform; 
+        }
+        .cursor-follower.active { width: 100px; height: 100px; opacity: 1; }
+
+        /* --- LAYOUT --- */
+        main { padding: 0 5vw; position: relative; z-index: 10; }
+
+        header {
+            padding: 4rem 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #222;
+            
+            /* --- SPACING FIX: MARGIN REMOVED --- */
+            margin-bottom: 0; 
+        }
+
+        h1 { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+        .meta-info { font-family: var(--font-mono); font-size: 0.75rem; color: #666; text-align: right; line-height: 1.4; }
+
+        /* --- PROJECT LIST --- */
+        .project-item {
+            position: relative;
+            padding: 3.5rem 0;
+            border-bottom: 1px solid #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            transition: padding 0.3s ease;
+            cursor: pointer;
+            z-index: 20;
+        }
+        .project-item:hover { padding: 4.5rem 0; }
+
+        .project-meta, .project-role { font-family: var(--font-mono); font-size: 0.8rem; color: #555; width: 150px; }
+        .project-role { text-align: right; }
+
+        .project-title {
+            font-size: 5vw; 
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            mix-blend-mode: difference;
+            position: relative;
+        }
+
+        /* --- THE FLOATING IMAGE CONTAINER --- */
+        .image-reveal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 450px; height: 300px;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+            transition: opacity 0.3s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+        }
+        
+        .image-reveal.visible { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+        .image-reveal img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) brightness(0.8) contrast(1.2);
+            will-change: opacity, transform;
+        }
+
+        /* Animation Classes */
+        .img-enter { animation: fadeScaleIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .img-exit { animation: fadeScaleOut 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes fadeScaleIn {
+            from { opacity: 0; transform: scale(1.2); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeScaleOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.9); }
+        }
+
+        /* Static Noise Overlay */
+        @keyframes staticTwitch {
+            0% { background-position: 0 0; }
+            10% { background-position: -5% -10%; }
+            50% { background-position: -25% 10%; }
+            90% { background-position: -10% 10%; }
+            100% { background-position: 0 0; }
+        }
+        .image-reveal::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            filter: contrast(250%) brightness(150%);
+            mix-blend-mode: hard-light; 
+            opacity: 0.6; 
+            animation: staticTwitch 0.1s steps(1) infinite;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="page-transition"></div>
+    <div class="cursor-follower"></div>
+
+    <div class="image-reveal" id="reveal-container">
+        </div>
+
+    <main>
+        <header>
+            <h1>Will Turner</h1>
+            <div class="meta-info">
+                GM INDUSTRIAL DESIGN<br>
+                DETROIT, MI<br>
+                EST. 2016
+            </div>
+        </header>
+
+        <div class="project-list">
+            <a href="project-lyriq.html" class="project-item" data-img="https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070">
+                <div class="project-meta">01 / 2022</div>
+                <div class="project-title">Lyriq + Optiq</div>
+                <div class="project-role">Production</div>
+            </a>
+            <a href="project-celestiq.html" class="project-item" data-img="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1974">
+                <div class="project-meta">02 / 2022</div>
+                <div class="project-title">Celestiq</div>
+                <div class="project-role">Flagship</div>
+            </a>
+            <a href="project-mouse.html" class="project-item" data-img="https://images.unsplash.com/photo-1586953208448-b95a79798f07?q=80&w=2070">
+                <div class="project-meta">03 / 2018</div>
+                <div class="project-title">Apple Mouse</div>
+                <div class="project-role">Concept</div>
+            </a>
+            <a href="project-xenith.html" class="project-item" data-img="https://images.unsplash.com/photo-1541807084-5c52b6b3bd99?q=80&w=2070">
+                <div class="project-meta">04 / 2017</div>
+                <div class="project-title">Xenith Helmet</div>
+                <div class="project-role">Research</div>
+            </a>
+        </div>
+    </main>
+
+    <script>
         // --- PAGE TRANSITION & BACK BUTTON FIX ---
         const curtain = document.querySelector('.page-transition');
 
@@ -17,7 +218,6 @@
 
         // 2. Browser Back Button (The "Nuclear" Fix)
         // This runs EVERY time the page becomes visible.
-        // We removed the "if (event.persisted)" check to force it to run always.
         window.addEventListener('pageshow', () => {
             forceReveal();
         });
@@ -100,3 +300,5 @@
             });
         })();
     </script>
+</body>
+</html>
