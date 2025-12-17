@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ambi Project | Will Turner</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #ffffff;
+            --accent: #333;
+            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            overflow: hidden; 
+            width: 100vw;
+            height: 100vh;
+            cursor: crosshair; 
+            user-select: none; 
+        }
+
+        /* --- TRANSITION CURTAIN --- */
+        .page-transition {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000;
+            z-index: 99999999;
+            transform: translateY(0%);
+            transition: transform 0.8s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        .page-transition.reveal { transform: translateY(-100%); }
+
+        /* --- UI LAYER --- */
+        .ui-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .back-btn {
+            pointer-events: auto;
+            text-decoration: none;
+            color: white;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 2px;
+            transition: all 0.3s;
+            background: rgba(0,0,0,0.5);
+            cursor: pointer;
+            position: absolute;
+            top: 45px; left: 45px;
+        }
+        .back-btn:hover { background: white; color: black; }
+
+        .crosshair {
+            position: absolute;
+            width: 20px; height: 20px;
+            border-color: white;
+            opacity: 0.5;
+        }
+        .c-tl { top: 30px; left: 30px; border-top: 1px solid; border-left: 1px solid; }
+        .c-tr { top: 30px; right: 30px; border-top: 1px solid; border-right: 1px solid; }
+        .c-bl { bottom: 30px; left: 30px; border-bottom: 1px solid; border-left: 1px solid; }
+        .c-br { bottom: 30px; right: 30px; border-bottom: 1px solid; border-right: 1px solid; }
+
+        .progress-track {
+            position: absolute;
+            bottom: 30px;
+            left: 60px;
+            right: 60px;
+            height: 1px;
+            background: #222;
+        }
+        .progress-fill { height: 100%; background: #fff; width: 0%; }
+
+        /* --- SCROLL CONTENT --- */
+        .scroll-container {
+            display: flex;
+            flex-wrap: nowrap;
+            height: 100vh;
+            width: fit-content;
+            will-change: transform;
+            cursor: grab;
+        }
+        .scroll-container:active { cursor: grabbing; }
+
+        .panel {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5vw;
+            flex-shrink: 0;
+            transition: opacity 0.5s;
+        }
+
+        /* Typography Styles */
+        .title-card { width: 60vw; flex-direction: column; align-items: flex-start; justify-content: center; }
+        h1 { font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; letter-spacing: -2px; pointer-events: none; }
+        .project-details { font-family: var(--font-mono); color: #888; font-size: 0.8rem; line-height: 1.6; border-left: 1px solid #333; padding-left: 20px; pointer-events: none; }
+
+        /* Image Handling */
+        .panel img {
+            max-height: 70vh; max-width: 70vw; box-shadow: 0 0 0 1px #222; pointer-events: none; 
+        }
+        .full-bleed { padding: 0; width: 100vw; }
+        .full-bleed img { width: 100%; height: 100%; object-fit: cover; max-height: 100vh; max-width: 100vw; }
+        
+        /* Layouts */
+        .text-only { width: 40vw; }
+        .text-only p { font-size: 1.2rem; line-height: 1.4; color: #ccc; pointer-events: none; }
+        
+        .duo { width: 80vw; gap: 20px; }
+        .duo img { max-width: 45%; }
+
+    </style>
+</head>
+<body>
+
+    <div class="page-transition"></div>
+
+    <div class="ui-layer">
+        <a href="index.html" class="back-btn">← Index</a>
+        <div class="crosshair c-tl"></div>
+        <div class="crosshair c-tr"></div>
+        <div class="crosshair c-bl"></div>
+        <div class="crosshair c-br"></div>
+        <div class="progress-track">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="scroll-container">
+        
+        <section class="panel title-card">
+            <h1>Ambi<br>System</h1>
+            <div class="project-details">
+                <span style="color:white">PROJECT 03</span><br><br>
+                ROLE: INDUSTRIAL DESIGN<br>
+                FOCUS: ERGONOMICS + INCLUSIVITY<br>
+                STATUS: CONCEPT
+            </div>
+        </section>
+
+        <section class="panel full-bleed">
+            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/8034c565949519.5b058a594458d.jpg" alt="Ambi Hero">
+        </section>
+
+        <section class="panel text-only">
+            <p>10% of the population is left-handed, yet peripheral architecture remains rigidly right-biased. Ambi challenges this asymmetry.</p>
+        </section>
+
+        <section class="panel">
+            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/18c64465949519.5b058a5945199.jpg" alt="Ideation Sketches">
+        </section>
+
+        <section class="panel text-only">
+            <p>Modular reversibility. A magnetic key-switch array allows the numeric pad to detach and re-orient for left-hand dominance instantly.</p>
+        </section>
+
+        <section class="panel duo">
+            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/5e009465949519.5b058a5944c68.jpg" alt="Detail 1">
+            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/12579b65949519.5b058a5944111.jpg" alt="Detail 2">
+        </section>
+
+        <section class="panel full-bleed">
+            <img src="https://mir-s3-cdn-cf.behance.net/project_modules/fs/c6237c65949519.5b058a594589d.jpg" alt="Final Render">
+        </section>
+
+    </div>
+
+    <script>
+        // --- PAGE TRANSITION ---
+        const curtain = document.querySelector('.page-transition');
+        window.onload = () => setTimeout(() => curtain.classList.add('reveal'), 100);
+
+        const backBtn = document.querySelector('.back-btn');
+        backBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            curtain.classList.remove('reveal');
+            setTimeout(() => window.location.href = this.getAttribute('href'), 800);
+        });
+
+        // --- SCROLL PHYSICS ---
+        const container = document.querySelector('.scroll-container');
+        const progressBar = document.querySelector('.progress-fill');
+        
+        let currentScroll = 0, targetScroll = 0, maxScroll = 0;
+        let skew = 0;
+        let isDragging = false, startX = 0, dragStartScroll = 0;
+
+        function updateWidth() { maxScroll = container.scrollWidth - window.innerWidth; }
+        window.addEventListener('resize', updateWidth);
+        updateWidth();
+
+        window.addEventListener('wheel', (e) => {
+            targetScroll += e.deltaY;
+            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if(e.target.closest('.back-btn')) return;
+            isDragging = true;
+            startX = e.pageX;
+            dragStartScroll = targetScroll;
+            container.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if(!isDragging) return;
+            const walk = (startX - e.pageX) * 1.5; 
+            targetScroll = dragStartScroll + walk;
+            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+        });
+
+        document.addEventListener('mouseup', () => { isDragging = false; container.style.cursor = 'grab'; });
+        document.addEventListener('mouseleave', () => { isDragging = false; });
+
+        function animate() {
+            const diff = targetScroll - currentScroll;
+            currentScroll += diff * 0.08;
+            let rawSkew = diff * 0.005; 
+            skew = Math.max(-2, Math.min(rawSkew, 2));
+
+            container.style.transform = `translateX(-${currentScroll}px) skewX(${-skew}deg)`;
+            const progress = (currentScroll / maxScroll) * 100;
+            progressBar.style.width = `${progress}%`;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
