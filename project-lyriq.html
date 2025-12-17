@@ -41,7 +41,7 @@
         }
         .page-transition.reveal { transform: translateY(-100%); }
 
-        /* --- 4. UI LAYER --- */
+        /* --- 4. UI LAYER (HUD) --- */
         .ui-layer {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -49,6 +49,18 @@
             z-index: 100;
         }
 
+        /* Crosshairs (The Corner Details) */
+        .crosshair {
+            position: absolute; width: 20px; height: 20px; 
+            border-color: rgba(255,255,255,0.5); /* White with opacity */
+            
+        }
+        .c-tl { top: 30px; left: 30px; border-top: 1px solid; border-left: 1px solid; }
+        .c-tr { top: 30px; right: 30px; border-top: 1px solid; border-right: 1px solid; }
+        .c-bl { bottom: 30px; left: 30px; border-bottom: 1px solid; border-left: 1px solid; }
+        .c-br { bottom: 30px; right: 30px; border-bottom: 1px solid; border-right: 1px solid; }
+
+        /* Back Button */
         .back-btn {
             pointer-events: auto;
             text-decoration: none;
@@ -63,10 +75,11 @@
             background: rgba(0,0,0,0.5);
             cursor: pointer;
             position: absolute;
-            top: 45px; left: 45px;
+            top: 45px; left: 45px; /* Offset from the crosshair */
         }
         .back-btn:hover { background: white; color: black; }
 
+        /* Progress Bar */
         .progress-track {
             position: absolute; bottom: 30px; left: 60px; right: 60px; height: 1px; background: #222;
         }
@@ -179,6 +192,11 @@
 
     <div class="ui-layer">
         <a href="index.html" class="back-btn">← Index</a>
+        <div class="crosshair c-tl"></div>
+        <div class="crosshair c-tr"></div>
+        <div class="crosshair c-bl"></div>
+        <div class="crosshair c-br"></div>
+        
         <div class="progress-track"><div class="progress-fill"></div></div>
     </div>
 
@@ -218,7 +236,7 @@
             <div style="font-family: var(--font-mono); color: #666; margin-bottom: 20px;">FROM SKETCH TO TOOLING</div>
             
             <h2 style="font-size: 2.5rem; line-height: 1.1;">The "Impossible" Rotary</h2>
-            <p>The MFC required coordinating between internal GM eletrical engineering, external engineering supplier support in addition to the design development process within the studio. I led the DFM process, working directly with electrical engineering to package actuators inside the floating cantilever.</p>
+            <p>The MFC required coordinating 5 active hot-keys on a single force-sensing haptic surface. I led the DFM process, working directly with electrical engineering to package actuators inside the floating cantilever.</p>
             <br>
             <div class="stat-grid" style="border-top: 1px solid #333;">
                 <div class="stat-item">
@@ -346,8 +364,8 @@
                     const el = entry.target;
                     const target = parseInt(el.getAttribute('data-target'));
                     let count = 0;
-                    const duration = 2000; // 2 seconds
-                    const increment = target / (duration / 16); // 60fps
+                    const duration = 2000; 
+                    const increment = target / (duration / 16); 
 
                     const timer = setInterval(() => {
                         count += increment;
@@ -358,14 +376,12 @@
                             el.innerText = Math.floor(count).toLocaleString();
                         }
                     }, 16);
-                    observer.unobserve(el); // Only run once
+                    observer.unobserve(el); 
                 }
             });
         }, observerOptions);
 
         document.querySelectorAll('.count-up').forEach(el => observer.observe(el));
-
     </script>
 </body>
 </html>
-
