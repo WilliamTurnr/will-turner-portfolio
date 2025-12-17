@@ -21,7 +21,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: var(--font-main);
-            overflow: hidden; /* FORCE NO VERTICAL SCROLL */
+            overflow: hidden; 
             width: 100vw;
             height: 100vh;
             cursor: crosshair; 
@@ -74,8 +74,8 @@
 
         /* --- 5. HORIZONTAL LAYOUT ENGINE --- */
         .scroll-container {
-            display: flex;        /* This forces items side-by-side */
-            flex-wrap: nowrap;    /* This prevents them from wrapping down */
+            display: flex;        
+            flex-wrap: nowrap;    
             height: 100vh;
             width: fit-content;
             will-change: transform;
@@ -90,7 +90,7 @@
             align-items: center;
             justify-content: center;
             padding: 0 5vw;
-            flex-shrink: 0;     /* Prevent shrinking */
+            flex-shrink: 0;     
             position: relative;
         }
 
@@ -104,6 +104,7 @@
             max-height: 70vh; max-width: 70vw; 
             box-shadow: 0 0 0 1px #222; 
             pointer-events: none; 
+            object-fit: cover;
         }
 
         .full-bleed { padding: 0; width: 100vw; min-width: 100vw; }
@@ -123,12 +124,37 @@
             padding-top: 20px; 
             width: 100%;
         }
-        .stat-item h3 { font-size: 1.8rem; color: white; margin-bottom: 5px; }
+        .stat-item h3 { font-size: 1.8rem; color: white; margin-bottom: 5px; font-variant-numeric: tabular-nums; }
         .stat-item span { font-family: var(--font-mono); font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Quote Block */
         .quote-block { font-size: 1.6rem; font-style: italic; color: #fff; border-left: 2px solid white; padding-left: 30px; margin-bottom: 20px; max-width: 500px; }
         .quote-source { font-family: var(--font-mono); font-size: 0.8rem; color: #666; font-style: normal; }
+
+        /* Grid for Stalks/Switches */
+        .grid-panel { 
+            width: 80vw; 
+            min-width: 800px;
+            display: flex; 
+            gap: 60px; 
+            align-items: center; 
+        }
+        .grid-text { width: 30%; }
+        .grid-2x2 { 
+            width: 70%; 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            grid-template-rows: 1fr 1fr; 
+            gap: 20px; 
+        }
+        .grid-2x2 img { 
+            width: 100%; 
+            height: 35vh; 
+            object-fit: cover; 
+            border: 1px solid #333;
+            transition: transform 0.3s ease;
+        }
+        .grid-2x2 img:hover { transform: scale(1.02); border-color: #fff; }
 
         /* Instagram Row */
         .insta-row { 
@@ -178,12 +204,12 @@
             
             <div class="stat-grid">
                 <div class="stat-item">
-                    <h3>20,318</h3>
-                    <span>Units Sold (2024 YTD)</span>
+                    <h3 class="count-up" data-target="55000">0</h3>
+                    <span>Units Sold (Global Cumulative)</span>
                 </div>
                 <div class="stat-item">
-                    <h3>70%</h3>
-                    <span>New-to-Brand Buyers</span>
+                    <h3 class="count-up" data-target="70">0</h3>
+                    <span>% New-to-Brand Buyers</span>
                 </div>
             </div>
         </section>
@@ -196,20 +222,40 @@
             <br>
             <div class="stat-grid" style="border-top: 1px solid #333;">
                 <div class="stat-item">
-                    <h3 style="font-size: 1.2rem; color:#888;">TIMELINE</h3>
-                    <span style="color: white; font-size: 1.4rem;">-9 Months</span><br>
-                    <span style="font-size: 0.6rem;">Schedule Reduction</span>
+                    <h3 style="font-size: 1.2rem; color:#888;">CRYSTAL</h3>
+                    <span style="color: white; font-size: 1.2rem;">Dual-Pattern Cut</span><br>
+                    <span style="font-size: 0.6rem;">Linear (Lux) vs Triangular (Sport)</span>
                 </div>
                 <div class="stat-item">
                     <h3 style="font-size: 1.2rem; color:#888;">COMPLEXITY</h3>
-                    <span style="color: white; font-size: 1.4rem;">Class-A Glass</span><br>
-                    <span style="font-size: 0.6rem;">Backlit Crystal Integration</span>
+                    <span style="color: white; font-size: 1.2rem;">Class-A Glass</span><br>
+                    <span style="font-size: 0.6rem;">Backlit Integration</span>
                 </div>
             </div>
         </section>
 
         <section class="panel">
             <img src="images/lyriq-press-1.jpg" alt="MFC Detail Shot">
+        </section>
+
+        <section class="panel grid-panel">
+            <div class="grid-text text-only" style="width: 100%; min-width: auto;">
+                <h2>Tactile Harmony</h2>
+                <p>Precise knurling patterns and weighted damping across all stalks and switches create a unified sense of precision throughout the cabin.</p>
+                <br>
+                <div style="font-family: var(--font-mono); font-size: 0.7rem; color: #666; border-left: 1px solid #444; padding-left: 15px;">
+                    HIDDEN DETAIL:<br>
+                    "Merlette" Ducks engraved on<br>
+                    interior surfaces.
+                </div>
+            </div>
+            
+            <div class="grid-2x2">
+                <img src="images/lyriq-stalk-1.jpg" alt="Wiper Stalk">
+                <img src="images/lyriq-stalk-2.jpg" alt="Shifter Stalk">
+                <img src="images/lyriq-window.jpg" alt="Window Switch">
+                <img src="images/lyriq-aux.jpg" alt="Aux Bank">
+            </div>
         </section>
 
         <section class="panel text-only">
@@ -234,7 +280,7 @@
     </div>
 
     <script>
-        // --- 1. SAFETY REVEAL (Fixes Black Screen) ---
+        // --- 1. SAFETY REVEAL ---
         const curtain = document.querySelector('.page-transition');
         function forceReveal() { 
             requestAnimationFrame(() => { curtain.classList.add('reveal'); }); 
@@ -291,6 +337,34 @@
             requestAnimationFrame(animate);
         }
         animate();
+
+        // --- 4. NUMBER FLIP ANIMATION ---
+        const observerOptions = { threshold: 0.5 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseInt(el.getAttribute('data-target'));
+                    let count = 0;
+                    const duration = 2000; // 2 seconds
+                    const increment = target / (duration / 16); // 60fps
+
+                    const timer = setInterval(() => {
+                        count += increment;
+                        if (count >= target) {
+                            el.innerText = target.toLocaleString() + (target > 100 ? '+' : '%');
+                            clearInterval(timer);
+                        } else {
+                            el.innerText = Math.floor(count).toLocaleString();
+                        }
+                    }, 16);
+                    observer.unobserve(el); // Only run once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.count-up').forEach(el => observer.observe(el));
+
     </script>
 </body>
 </html>
