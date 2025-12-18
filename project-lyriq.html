@@ -110,20 +110,24 @@
             position: relative;
         }
 
-        /* --- RESTORED FULL BLEED STYLE --- */
+        /* --- FULL BLEED STYLE (FIXED) --- */
         .full-bleed { 
             width: 100vw; 
             min-width: 100vw; 
-            padding: 0; /* No Padding = Edge to Edge */
+            padding: 0; 
         }
         .full-bleed img { 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; /* Fill the screen */
+            object-fit: cover; 
             max-height: 100vh; 
             max-width: 100vw; 
             border: none;
             box-shadow: none;
+            /* CRITICAL FIX: This stops the mouse from "seeing" the image */
+            pointer-events: none; 
+            user-drag: none;
+            -webkit-user-drag: none;
         }
 
         /* --- ANIMATION CLASSES --- */
@@ -341,13 +345,23 @@
             targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
         });
 
+        // CRITICAL UPDATE: PREVENT DEFAULT DRAGGING
         document.addEventListener('mousedown', (e) => {
             if(e.target.closest('.back-btn')) return;
-            isDragging = true; startX = e.pageX; dragStartScroll = targetScroll; container.style.cursor = 'grabbing';
+            
+            e.preventDefault(); // Prevents "ghost image" drag
+            
+            isDragging = true; 
+            startX = e.pageX; 
+            dragStartScroll = targetScroll; 
+            container.style.cursor = 'grabbing';
         });
 
         document.addEventListener('mousemove', (e) => {
             if(!isDragging) return;
+            // Prevent default here too just in case
+            e.preventDefault(); 
+            
             targetScroll = dragStartScroll + (startX - e.pageX) * 2;
             targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
         });
