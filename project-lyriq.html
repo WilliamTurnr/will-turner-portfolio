@@ -110,24 +110,29 @@
             position: relative;
         }
 
-        /* --- CINEMA FRAME HERO (New Style) --- */
-        .full-bleed { 
-            width: 100vw; 
-            min-width: 100vw; 
-            padding: 0 40px; /* Breathing room */
+        /* --- NEW: CINEMA HERO CLASS (Forces the Frame) --- */
+        .cinema-hero {
+            width: 100vw;
+            min-width: 100vw; /* Take up full width of scroll area */
             display: flex;
             align-items: center;
             justify-content: center;
+            background: var(--bg-color);
         }
-        .full-bleed img { 
-            width: 100%; 
-            height: 85vh; /* Not full height, so it feels framed */
-            object-fit: contain; /* Ensures NO cropping */
-            max-width: 1600px;
-            border: 1px solid #333; /* Technical border */
-            box-shadow: 0 0 30px rgba(0,0,0,0.5); /* Subtle depth */
-            pointer-events: none;
+
+        .cinema-hero img {
+            width: auto !important;
+            height: auto !important;
+            max-width: 85vw !important; /* Force side margins */
+            max-height: 85vh !important; /* Force top/bottom margins */
+            object-fit: contain !important;
+            border: 1px solid #333;
+            box-shadow: 0 0 50px rgba(0,0,0,0.3);
         }
+
+        /* --- OLD FULL BLEED (Kept for closing shot only) --- */
+        .full-bleed { width: 100vw; min-width: 100vw; padding: 0; }
+        .full-bleed img { width: 100%; height: 100%; object-fit: cover; max-height: 100vh; max-width: 100vw; border: none; }
 
         /* --- ANIMATION CLASSES --- */
         .reveal-text {
@@ -150,7 +155,7 @@
         .project-details { font-family: var(--font-mono); color: #888; font-size: 0.8rem; line-height: 1.6; border-left: 1px solid #333; padding-left: 20px; }
 
         /* Regular Images */
-        .panel img:not(.full-bleed img) {
+        .panel img:not(.cinema-hero img):not(.full-bleed img) {
             max-height: 70vh; max-width: 70vw; 
             box-shadow: 0 0 0 1px #222; 
             pointer-events: none; 
@@ -224,7 +229,7 @@
             </div>
         </section>
 
-        <section class="panel full-bleed">
+        <section class="panel cinema-hero">
             <img src="images/lyriq/lyriq-press-hero.jpg" alt="Official Press Shot">
         </section>
 
