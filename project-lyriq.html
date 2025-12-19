@@ -122,18 +122,34 @@
             margin-bottom: 20px;
             color: white;
             letter-spacing: -0.5px;
-            text-transform: none; /* Removed uppercase forcing to match image if needed, or keep standard */
         }
 
         /* Body Text (Precise knurling...) */
-        p {
-            font-family: var(--font-main); /* Sans Serif */
+        /* UPDATED: Added min-height to fix alignment issues */
+        .chapter-panel p {
+            font-family: var(--font-main); 
             font-weight: 400;
             font-size: 1.1rem;
             line-height: 1.5;
-            color: #b0b0b0; /* Light Grey matching image */
+            color: #b0b0b0; 
             margin-bottom: 30px;
             max-width: 550px;
+            
+            /* THE ALIGNMENT FIX: */
+            min-height: 6.6rem; 
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        
+        /* General paragraph style */
+        p {
+            font-family: var(--font-main);
+            font-weight: 400;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #b0b0b0;
+            margin-bottom: 30px;
         }
 
         /* Hidden Detail Box (The Monospace Part) */
