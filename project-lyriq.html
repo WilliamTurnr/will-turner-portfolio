@@ -110,7 +110,7 @@
             position: relative;
         }
 
-        /* --- FULL BLEED STYLE (FIXED) --- */
+        /* --- FULL BLEED STYLE --- */
         .full-bleed { 
             width: 100vw; 
             min-width: 100vw; 
@@ -124,10 +124,48 @@
             max-width: 100vw; 
             border: none;
             box-shadow: none;
-            /* CRITICAL FIX: This stops the mouse from "seeing" the image */
             pointer-events: none; 
             user-drag: none;
             -webkit-user-drag: none;
+        }
+
+        /* --- NEW: CHAPTER PANEL (The Fix) --- */
+        .chapter-panel {
+            width: 55vw; 
+            min-width: 550px; 
+            flex-direction: column; 
+            align-items: flex-start; 
+            justify-content: center;
+            border-left: 1px solid #333; /* The Technical Anchor Line */
+            padding-left: 60px;
+        }
+
+        .chapter-label {
+            font-family: var(--font-mono);
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        .chapter-panel h2 {
+            font-size: 4.5rem; /* HUGE IMPACT */
+            line-height: 0.9;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            color: white;
+            letter-spacing: -2px;
+        }
+
+        .chapter-panel p {
+            font-family: var(--font-mono); /* Monospace body for tech feel */
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #aaa;
+            margin-bottom: 40px;
+            max-width: 500px;
         }
 
         /* --- ANIMATION CLASSES --- */
@@ -150,7 +188,7 @@
         h1 { font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; letter-spacing: -2px; }
         .project-details { font-family: var(--font-mono); color: #888; font-size: 0.8rem; line-height: 1.6; border-left: 1px solid #333; padding-left: 20px; }
 
-        /* Regular Images (Not full bleed) */
+        /* Regular Images */
         .panel img:not(.full-bleed img) {
             max-height: 70vh; max-width: 70vw; 
             box-shadow: 0 0 0 1px #222; 
@@ -158,8 +196,8 @@
             object-fit: cover;
         }
 
+        /* Keep Text Only for Quote */
         .text-only { width: 50vw; min-width: 500px; flex-direction: column; align-items: flex-start; justify-content: center; }
-        .text-only h2 { font-size: 2rem; margin-bottom: 20px; text-transform: uppercase; color: white; }
         .text-only p { font-size: 1.1rem; line-height: 1.5; color: #aaa; margin-bottom: 30px; max-width: 600px; }
         
         .stat-grid { 
@@ -170,7 +208,7 @@
             padding-top: 20px; 
             width: 100%;
         }
-        .stat-item h3 { font-size: 1.8rem; color: white; margin-bottom: 5px; font-variant-numeric: tabular-nums; }
+        .stat-item h3 { font-size: 1.8rem; color: white; margin-bottom: 5px; font-variant-numeric: tabular-nums; font-family: var(--font-main); }
         .stat-item span { font-family: var(--font-mono); font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
         .quote-block { font-size: 1.6rem; font-style: italic; color: #fff; border-left: 2px solid white; padding-left: 30px; margin-bottom: 20px; max-width: 500px; }
@@ -185,7 +223,6 @@
             grid-template-rows: 1fr 1fr; 
             gap: 20px; 
         }
-        /* Grid Images */
         .grid-2x2 img { 
             width: 100% !important; 
             height: 35vh !important; 
@@ -229,11 +266,12 @@
             <img src="images/lyriq/lyriq-press-hero.jpg" alt="Official Press Shot">
         </section>
 
-        <section class="panel text-only">
-            <h2 class="reveal-text">The Jewel Box</h2>
-            <p class="reveal-text delay-1">I designed the primary touchpoints: the crystal MFC controller, wiper/shifter stalks, and window switches. The goal was to bridge the digital experience with tactile, mechanical luxury.</p>
+        <section class="panel chapter-panel">
+            <span class="chapter-label reveal-text">01. CONTEXT</span>
+            <h2 class="reveal-text delay-1">The Jewel<br>Box</h2>
+            <p class="reveal-text delay-2">I designed the primary touchpoints: the crystal MFC controller, wiper/shifter stalks, and window switches. The goal was to bridge the digital experience with tactile, mechanical luxury.</p>
             
-            <div class="stat-grid reveal-text delay-2">
+            <div class="stat-grid reveal-text delay-3">
                 <div class="stat-item">
                     <h3 class="count-up" data-target="55000">0</h3>
                     <span>Units Sold (Global Cumulative)</span>
@@ -245,12 +283,11 @@
             </div>
         </section>
 
-        <section class="panel text-only" style="border-left: 1px solid #333; padding-left: 60px;">
-            <div class="reveal-text" style="font-family: var(--font-mono); color: #666; margin-bottom: 20px;">FROM SKETCH TO TOOLING</div>
-            
-            <h2 class="reveal-text delay-1" style="font-size: 2.5rem; line-height: 1.1;">The "Impossible" Rotary</h2>
+        <section class="panel chapter-panel">
+            <span class="chapter-label reveal-text">02. EXECUTION</span>
+            <h2 class="reveal-text delay-1">The "Impossible"<br>Rotary</h2>
             <p class="reveal-text delay-2">The MFC required coordinating 5 active hot-keys on a single force-sensing haptic surface. I led the DFM process, working directly with electrical engineering to package actuators inside the floating cantilever.</p>
-            <br>
+            
             <div class="stat-grid reveal-text delay-3" style="border-top: 1px solid #333;">
                 <div class="stat-item">
                     <h3 style="font-size: 1.2rem; color:#888;">CRYSTAL</h3>
@@ -345,23 +382,15 @@
             targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
         });
 
-        // CRITICAL UPDATE: PREVENT DEFAULT DRAGGING
         document.addEventListener('mousedown', (e) => {
             if(e.target.closest('.back-btn')) return;
-            
-            e.preventDefault(); // Prevents "ghost image" drag
-            
-            isDragging = true; 
-            startX = e.pageX; 
-            dragStartScroll = targetScroll; 
-            container.style.cursor = 'grabbing';
+            e.preventDefault(); 
+            isDragging = true; startX = e.pageX; dragStartScroll = targetScroll; container.style.cursor = 'grabbing';
         });
 
         document.addEventListener('mousemove', (e) => {
             if(!isDragging) return;
-            // Prevent default here too just in case
             e.preventDefault(); 
-            
             targetScroll = dragStartScroll + (startX - e.pageX) * 2;
             targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
         });
