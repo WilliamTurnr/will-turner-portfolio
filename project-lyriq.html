@@ -26,6 +26,7 @@
             height: 100vh;
             cursor: crosshair; 
             user-select: none; 
+            -webkit-font-smoothing: antialiased; /* Crisp text */
         }
 
         /* --- 3. PAGE TRANSITION --- */
@@ -110,7 +111,56 @@
             position: relative;
         }
 
-        /* --- FULL BLEED STYLE --- */
+        /* --- TEXT STYLES (MATCHING YOUR IMAGE) --- */
+        
+        /* Main Headers (Tactile Harmony, Jewel Box) */
+        h2 {
+            font-family: var(--font-main);
+            font-weight: 700; /* Bold */
+            font-size: 2.5rem; /* Matches image scale */
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: white;
+            letter-spacing: -0.5px;
+            text-transform: none; /* Removed uppercase forcing to match image if needed, or keep standard */
+        }
+
+        /* Body Text (Precise knurling...) */
+        p {
+            font-family: var(--font-main); /* Sans Serif */
+            font-weight: 400;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #b0b0b0; /* Light Grey matching image */
+            margin-bottom: 30px;
+            max-width: 550px;
+        }
+
+        /* Hidden Detail Box (The Monospace Part) */
+        .hidden-detail {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.6;
+            border-left: 1px solid #333;
+            padding-left: 20px;
+            margin-top: 40px;
+        }
+
+        /* Small Labels (01. Context) */
+        .chapter-label {
+            font-family: var(--font-mono);
+            color: #666;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        /* --- FULL BLEED IMAGES --- */
         .full-bleed { 
             width: 100vw; 
             min-width: 100vw; 
@@ -125,67 +175,22 @@
             border: none;
             box-shadow: none;
             pointer-events: none; 
-            user-drag: none;
-            -webkit-user-drag: none;
         }
 
-        /* --- NEW: CHAPTER PANEL (The Fix) --- */
+        /* Panel Widths */
         .chapter-panel {
             width: 55vw; 
             min-width: 550px; 
             flex-direction: column; 
             align-items: flex-start; 
             justify-content: center;
-            border-left: 1px solid #333; /* The Technical Anchor Line */
+            border-left: 1px solid #333; 
             padding-left: 60px;
         }
 
-        .chapter-label {
-            font-family: var(--font-mono);
-            color: #666;
-            font-size: 0.8rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: block;
-        }
-
-        .chapter-panel h2 {
-            font-size: 4.5rem; /* HUGE IMPACT */
-            line-height: 0.9;
-            margin-bottom: 40px;
-            text-transform: uppercase;
-            color: white;
-            letter-spacing: -2px;
-        }
-
-        .chapter-panel p {
-            font-family: var(--font-mono); /* Monospace body for tech feel */
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: #aaa;
-            margin-bottom: 40px;
-            max-width: 500px;
-        }
-
-        /* --- ANIMATION CLASSES --- */
-        .reveal-text {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); 
-        }
-        .reveal-text.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
-        .delay-3 { transition-delay: 0.3s; }
-
-        /* Content Styling */
         .title-card { width: 60vw; min-width: 600px; flex-direction: column; align-items: flex-start; justify-content: center; }
-        h1 { font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; letter-spacing: -2px; }
+        h1 { font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; letter-spacing: -2px; font-weight: 700; }
+        
         .project-details { font-family: var(--font-mono); color: #888; font-size: 0.8rem; line-height: 1.6; border-left: 1px solid #333; padding-left: 20px; }
 
         /* Regular Images */
@@ -196,26 +201,10 @@
             object-fit: cover;
         }
 
-        /* Keep Text Only for Quote */
-        .text-only { width: 50vw; min-width: 500px; flex-direction: column; align-items: flex-start; justify-content: center; }
-        .text-only p { font-size: 1.1rem; line-height: 1.5; color: #aaa; margin-bottom: 30px; max-width: 600px; }
-        
-        .stat-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 40px; 
-            border-top: 1px solid #333; 
-            padding-top: 20px; 
-            width: 100%;
-        }
-        .stat-item h3 { font-size: 1.8rem; color: white; margin-bottom: 5px; font-variant-numeric: tabular-nums; font-family: var(--font-main); }
-        .stat-item span { font-family: var(--font-mono); font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
-
-        .quote-block { font-size: 1.6rem; font-style: italic; color: #fff; border-left: 2px solid white; padding-left: 30px; margin-bottom: 20px; max-width: 500px; }
-        .quote-source { font-family: var(--font-mono); font-size: 0.8rem; color: #666; font-style: normal; }
-
+        /* Grid Layouts */
         .grid-panel { width: 80vw; min-width: 800px; display: flex; gap: 60px; align-items: center; }
-        .grid-text { width: 30%; }
+        .grid-text { width: 30%; display: flex; flex-direction: column; justify-content: center; }
+        
         .grid-2x2 { 
             width: 70%; 
             display: grid; 
@@ -234,6 +223,38 @@
 
         .insta-row { width: 80vw; min-width: 800px; gap: 30px; align-items: center; }
         .insta-row img { max-width: 30%; max-height: 60vh; border: 1px solid #333; border-radius: 8px; object-fit: cover; }
+
+        /* Quote Styling */
+        .quote-block { font-family: var(--font-main); font-weight: 300; font-size: 1.6rem; font-style: italic; color: #fff; border-left: 2px solid white; padding-left: 30px; margin-bottom: 20px; max-width: 500px; }
+        .quote-source { font-family: var(--font-mono); font-size: 0.8rem; color: #666; font-style: normal; }
+
+        /* Stats */
+        .stat-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
+            border-top: 1px solid #333; 
+            padding-top: 20px; 
+            width: 100%;
+            margin-top: 20px;
+        }
+        .stat-item h3 { font-size: 1.8rem; color: white; margin-bottom: 5px; font-variant-numeric: tabular-nums; font-family: var(--font-main); }
+        .stat-item span { font-family: var(--font-mono); font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* --- ANIMATION CLASSES --- */
+        .reveal-text {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .reveal-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
 
     </style>
 </head>
@@ -268,36 +289,34 @@
 
         <section class="panel chapter-panel">
             <span class="chapter-label reveal-text">01. CONTEXT</span>
-            <h2 class="reveal-text delay-1">The Jewel<br>Box</h2>
+            <h2 class="reveal-text delay-1">The Jewel Box</h2>
             <p class="reveal-text delay-2">I designed the primary touchpoints: the crystal MFC controller, wiper/shifter stalks, and window switches. The goal was to bridge the digital experience with tactile, mechanical luxury.</p>
             
             <div class="stat-grid reveal-text delay-3">
                 <div class="stat-item">
                     <h3 class="count-up" data-target="55000">0</h3>
-                    <span>Units Sold (Global Cumulative)</span>
+                    <span>Units Sold</span>
                 </div>
                 <div class="stat-item">
                     <h3 class="count-up" data-target="70">0</h3>
-                    <span>% New-to-Brand Buyers</span>
+                    <span>% New Buyers</span>
                 </div>
             </div>
         </section>
 
         <section class="panel chapter-panel">
             <span class="chapter-label reveal-text">02. EXECUTION</span>
-            <h2 class="reveal-text delay-1">The "Impossible"<br>Rotary</h2>
+            <h2 class="reveal-text delay-1">The Impossible Rotary</h2>
             <p class="reveal-text delay-2">The MFC required coordinating 5 active hot-keys on a single force-sensing haptic surface. I led the DFM process, working directly with electrical engineering to package actuators inside the floating cantilever.</p>
             
             <div class="stat-grid reveal-text delay-3" style="border-top: 1px solid #333;">
                 <div class="stat-item">
                     <h3 style="font-size: 1.2rem; color:#888;">CRYSTAL</h3>
-                    <span style="color: white; font-size: 1.2rem;">Dual-Pattern Cut</span><br>
-                    <span style="font-size: 0.6rem;">Linear (Lux) vs Triangular (Sport)</span>
+                    <span style="color: white; font-size: 1.2rem;">Dual-Pattern Cut</span>
                 </div>
                 <div class="stat-item">
                     <h3 style="font-size: 1.2rem; color:#888;">COMPLEXITY</h3>
-                    <span style="color: white; font-size: 1.2rem;">Class-A Glass</span><br>
-                    <span style="font-size: 0.6rem;">Backlit Integration</span>
+                    <span style="color: white; font-size: 1.2rem;">Class-A Glass</span>
                 </div>
             </div>
         </section>
@@ -307,11 +326,11 @@
         </section>
 
         <section class="panel grid-panel">
-            <div class="grid-text text-only" style="width: 100%; min-width: auto;">
+            <div class="grid-text">
                 <h2 class="reveal-text">Tactile Harmony</h2>
                 <p class="reveal-text delay-1">Precise knurling patterns and weighted damping across all stalks and switches create a unified sense of precision throughout the cabin.</p>
-                <br>
-                <div class="reveal-text delay-2" style="font-family: var(--font-mono); font-size: 0.7rem; color: #666; border-left: 1px solid #444; padding-left: 15px;">
+                
+                <div class="hidden-detail reveal-text delay-2">
                     HIDDEN DETAIL:<br>
                     "Merlette" Ducks engraved on<br>
                     interior surfaces.
@@ -326,13 +345,11 @@
             </div>
         </section>
 
-        <section class="panel text-only">
+        <section class="panel chapter-panel">
             <div class="quote-block reveal-text">
                 "The centerpiece of the cabin... with knurled metallic accents and exemplary fit-and-finish."
             </div>
             <div class="quote-source reveal-text delay-1">— WARDS AUTO, 10 BEST INTERIORS AWARD</div>
-            <br><br>
-            <p class="reveal-text delay-2">Featured in the Super Bowl "ScissorHands" campaign (100M+ views) and praised for bringing "Soul" back to the EV cabin.</p>
         </section>
 
         <section class="panel insta-row">
@@ -406,46 +423,37 @@
         }
         animate();
 
-        // --- 4. REVERSIBLE TEXT REVEAL & NUMBER RESET ---
+        // --- 4. REVEAL ANIMATION ---
         const observerOptions = { threshold: 0.2 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                
-                // === ENTERING SCREEN ===
                 if (entry.isIntersecting) {
-                    
                     if(entry.target.classList.contains('reveal-text')) {
                         entry.target.classList.add('active');
                     }
-                    
                     if(entry.target.classList.contains('count-up')) {
                         const el = entry.target;
                         const target = parseInt(el.getAttribute('data-target'));
-                        let count = 0;
-                        const duration = 2000; 
-                        const increment = target / (duration / 16); 
-
                         if(!el.classList.contains('counted')) {
                              el.classList.add('counted');
+                             let count = 0;
+                             const increment = target / 100;
                              const timer = setInterval(() => {
-                                count += increment;
-                                if (count >= target) {
-                                    el.innerText = target.toLocaleString() + (target > 100 ? '+' : '%');
-                                    clearInterval(timer);
-                                } else {
-                                    el.innerText = Math.floor(count).toLocaleString();
-                                }
-                            }, 16);
+                                 count += increment;
+                                 if (count >= target) {
+                                     el.innerText = target.toLocaleString() + (target > 100 ? '+' : '%');
+                                     clearInterval(timer);
+                                 } else {
+                                     el.innerText = Math.floor(count).toLocaleString();
+                                 }
+                             }, 16);
                         }
                     }
                 } 
-                
-                // === LEAVING SCREEN (REVERSE EFFECT) ===
                 else {
                     if(entry.target.classList.contains('reveal-text')) {
                         entry.target.classList.remove('active');
                     }
-
                     if(entry.target.classList.contains('count-up')) {
                         entry.target.classList.remove('counted');
                         entry.target.innerText = "0"; 
@@ -458,4 +466,3 @@
     </script>
 </body>
 </html>
-
