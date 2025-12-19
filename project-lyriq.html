@@ -26,7 +26,7 @@
             height: 100vh;
             cursor: crosshair; 
             user-select: none; 
-            -webkit-font-smoothing: antialiased; /* Crisp text */
+            -webkit-font-smoothing: antialiased;
         }
 
         /* --- 3. PAGE TRANSITION --- */
@@ -84,10 +84,60 @@
         }
         .back-btn:hover { background: white; color: black; }
 
-        .progress-track {
-            position: absolute; bottom: 30px; left: 60px; right: 60px; height: 1px; background: #222;
+        /* --- NEW MINIMAP STYLES --- */
+        .minimap-container {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40vw; /* Width of the mini-map on screen */
+            height: 50px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid #333;
+            border-radius: 4px;
+            overflow: hidden;
+            pointer-events: auto; /* Allow clicking/dragging */
+            z-index: 1000;
+            display: flex;
+            align-items: center;
         }
-        .progress-fill { height: 100%; background: #fff; width: 0%; transition: width 0.1s; }
+
+        /* The "Filmstrip" inside the minimap */
+        .minimap-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            opacity: 0.4; /* "Grayed out" look */
+            transition: opacity 0.3s;
+        }
+        .minimap-container:hover .minimap-track { opacity: 0.6; }
+
+        /* Tiny blocks representing content */
+        .mini-block {
+            height: 100%;
+            background: #333;
+            margin-right: 2px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .mini-block.img-block { background-size: cover; background-position: center; filter: grayscale(100%); }
+        .mini-block.text-block { background: #222; border: 1px solid #444; }
+
+        /* The Draggable "Viewfinder" */
+        .minimap-handle {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            width: 0px; /* JS will set this */
+            border: 2px solid #fff;
+            background: rgba(255,255,255,0.1);
+            cursor: grab;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        .minimap-handle:active { cursor: grabbing; background: rgba(255,255,255,0.2); }
+
 
         /* --- 5. HORIZONTAL LAYOUT ENGINE --- */
         .scroll-container {
@@ -111,21 +161,18 @@
             position: relative;
         }
 
-        /* --- TEXT STYLES (MATCHING YOUR IMAGE) --- */
-        
-        /* Main Headers (Tactile Harmony, Jewel Box) */
+        /* --- TEXT STYLES --- */
         h2 {
             font-family: var(--font-main);
-            font-weight: 700; /* Bold */
-            font-size: 2.5rem; /* Matches image scale */
+            font-weight: 700;
+            font-size: 2.5rem;
             line-height: 1.1;
             margin-bottom: 20px;
             color: white;
             letter-spacing: -0.5px;
         }
 
-        /* Body Text (Precise knurling...) */
-        /* UPDATED: Added min-height to fix alignment issues */
+        /* ALIGNMENT FIX */
         .chapter-panel p {
             font-family: var(--font-main); 
             font-weight: 400;
@@ -134,15 +181,12 @@
             color: #b0b0b0; 
             margin-bottom: 30px;
             max-width: 550px;
-            
-            /* THE ALIGNMENT FIX: */
             min-height: 6.6rem; 
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
         }
         
-        /* General paragraph style */
         p {
             font-family: var(--font-main);
             font-weight: 400;
@@ -152,7 +196,6 @@
             margin-bottom: 30px;
         }
 
-        /* Hidden Detail Box (The Monospace Part) */
         .hidden-detail {
             font-family: var(--font-mono);
             font-size: 0.75rem;
@@ -165,7 +208,6 @@
             margin-top: 40px;
         }
 
-        /* Small Labels (01. Context) */
         .chapter-label {
             font-family: var(--font-mono);
             color: #666;
@@ -176,98 +218,37 @@
             display: block;
         }
 
-        /* --- FULL BLEED IMAGES --- */
-        .full-bleed { 
-            width: 100vw; 
-            min-width: 100vw; 
-            padding: 0; 
-        }
-        .full-bleed img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            max-height: 100vh; 
-            max-width: 100vw; 
-            border: none;
-            box-shadow: none;
-            pointer-events: none; 
-        }
+        /* --- IMAGES --- */
+        .full-bleed { width: 100vw; min-width: 100vw; padding: 0; }
+        .full-bleed img { width: 100%; height: 100%; object-fit: cover; max-height: 100vh; max-width: 100vw; border: none; pointer-events: none; }
 
-        /* Panel Widths */
-        .chapter-panel {
-            width: 55vw; 
-            min-width: 550px; 
-            flex-direction: column; 
-            align-items: flex-start; 
-            justify-content: center;
-            border-left: 1px solid #333; 
-            padding-left: 60px;
-        }
-
+        .chapter-panel { width: 55vw; min-width: 550px; flex-direction: column; align-items: flex-start; justify-content: center; border-left: 1px solid #333; padding-left: 60px; }
         .title-card { width: 60vw; min-width: 600px; flex-direction: column; align-items: flex-start; justify-content: center; }
         h1 { font-size: 8vw; text-transform: uppercase; line-height: 0.85; margin-bottom: 30px; letter-spacing: -2px; font-weight: 700; }
-        
         .project-details { font-family: var(--font-mono); color: #888; font-size: 0.8rem; line-height: 1.6; border-left: 1px solid #333; padding-left: 20px; }
 
-        /* Regular Images */
-        .panel img:not(.full-bleed img) {
-            max-height: 70vh; max-width: 70vw; 
-            box-shadow: 0 0 0 1px #222; 
-            pointer-events: none; 
-            object-fit: cover;
-        }
+        .panel img:not(.full-bleed img) { max-height: 70vh; max-width: 70vw; box-shadow: 0 0 0 1px #222; pointer-events: none; object-fit: cover; }
 
-        /* Grid Layouts */
         .grid-panel { width: 80vw; min-width: 800px; display: flex; gap: 60px; align-items: center; }
         .grid-text { width: 30%; display: flex; flex-direction: column; justify-content: center; }
         
-        .grid-2x2 { 
-            width: 70%; 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            grid-template-rows: 1fr 1fr; 
-            gap: 20px; 
-        }
-        .grid-2x2 img { 
-            width: 100% !important; 
-            height: 35vh !important; 
-            object-fit: cover !important; 
-            border: 1px solid #333 !important; 
-            transition: transform 0.3s ease;
-        }
+        .grid-2x2 { width: 70%; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 20px; }
+        .grid-2x2 img { width: 100% !important; height: 35vh !important; object-fit: cover !important; border: 1px solid #333 !important; transition: transform 0.3s ease; }
         .grid-2x2 img:hover { transform: scale(1.02); border-color: #fff !important; }
 
         .insta-row { width: 80vw; min-width: 800px; gap: 30px; align-items: center; }
         .insta-row img { max-width: 30%; max-height: 60vh; border: 1px solid #333; border-radius: 8px; object-fit: cover; }
 
-        /* Quote Styling */
         .quote-block { font-family: var(--font-main); font-weight: 300; font-size: 1.6rem; font-style: italic; color: #fff; border-left: 2px solid white; padding-left: 30px; margin-bottom: 20px; max-width: 500px; }
         .quote-source { font-family: var(--font-mono); font-size: 0.8rem; color: #666; font-style: normal; }
 
-        /* Stats */
-        .stat-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 40px; 
-            border-top: 1px solid #333; 
-            padding-top: 20px; 
-            width: 100%;
-            margin-top: 20px;
-        }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; border-top: 1px solid #333; padding-top: 20px; width: 100%; margin-top: 20px; }
         .stat-item h3 { font-size: 1.8rem; color: white; margin-bottom: 5px; font-variant-numeric: tabular-nums; font-family: var(--font-main); }
         .stat-item span { font-family: var(--font-mono); font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
 
         /* --- ANIMATION CLASSES --- */
-        .reveal-text {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); 
-        }
-        .reveal-text.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
+        .reveal-text { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-text.active { opacity: 1; transform: translateY(0); }
         .delay-1 { transition-delay: 0.1s; }
         .delay-2 { transition-delay: 0.2s; }
         .delay-3 { transition-delay: 0.3s; }
@@ -284,7 +265,12 @@
         <div class="crosshair c-tr"></div>
         <div class="crosshair c-bl"></div>
         <div class="crosshair c-br"></div>
-        <div class="progress-track"><div class="progress-fill"></div></div>
+        
+        <div class="minimap-container">
+            <div class="minimap-track" id="minimap-track">
+                </div>
+            <div class="minimap-handle" id="minimap-handle"></div>
+        </div>
     </div>
 
     <div class="scroll-container">
@@ -345,7 +331,6 @@
             <div class="grid-text">
                 <h2 class="reveal-text">Tactile Harmony</h2>
                 <p class="reveal-text delay-1">Precise knurling patterns and weighted damping across all stalks and switches create a unified sense of precision throughout the cabin.</p>
-                
                 <div class="hidden-detail reveal-text delay-2">
                     HIDDEN DETAIL:<br>
                     "Merlette" Ducks engraved on<br>
@@ -396,45 +381,130 @@
             setTimeout(() => window.location.href = this.getAttribute('href'), 800);
         });
 
-        // --- 3. SCROLL PHYSICS ---
+        // --- 3. SCROLL PHYSICS & MINIMAP LOGIC ---
         const container = document.querySelector('.scroll-container');
-        const progressBar = document.querySelector('.progress-fill');
+        
+        // Minimap Elements
+        const miniTrack = document.getElementById('minimap-track');
+        const miniHandle = document.getElementById('minimap-handle');
+        const miniContainer = document.querySelector('.minimap-container');
+        
         let currentScroll = 0; let targetScroll = 0; let maxScroll = 0;
-        let isDragging = false; let startX = 0; let dragStartScroll = 0;
+        let isDraggingMain = false; let startX = 0; let dragStartScroll = 0;
+        let isDraggingMini = false; // Dragging the handle
+
+        // Initialize Minimap (Generate tiny blocks)
+        function initMinimap() {
+            miniTrack.innerHTML = ''; // Clear
+            const panels = document.querySelectorAll('.panel');
+            
+            // Generate visual blocks for each panel
+            panels.forEach(panel => {
+                const block = document.createElement('div');
+                block.classList.add('mini-block');
+                
+                // Scale width roughly (percentage of total sections)
+                // We'll use flex to distribute them evenly for now
+                block.style.flex = panel.offsetWidth + ' 0 auto';
+                
+                // Visual Type
+                const img = panel.querySelector('img');
+                if (img) {
+                    block.classList.add('img-block');
+                    block.style.backgroundImage = `url(${img.src})`;
+                } else {
+                    block.classList.add('text-block');
+                }
+                miniTrack.appendChild(block);
+            });
+        }
 
         function updateWidth() { 
             const realWidth = container.scrollWidth - window.innerWidth; 
             maxScroll = Math.max(realWidth, 100); 
+            
+            // Update Handle Width relative to Viewport
+            const ratio = window.innerWidth / container.scrollWidth;
+            const handleW = miniContainer.offsetWidth * ratio;
+            miniHandle.style.width = `${Math.max(handleW, 20)}px`; // Min width 20px
         }
+        
+        window.addEventListener('load', initMinimap);
         window.addEventListener('resize', updateWidth);
         setInterval(updateWidth, 1000); 
         updateWidth();
 
+        // Main Scroll Wheel
         window.addEventListener('wheel', (e) => {
             targetScroll += e.deltaY;
             targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
         });
 
+        // Drag Main Canvas
         document.addEventListener('mousedown', (e) => {
-            if(e.target.closest('.back-btn')) return;
+            if(e.target.closest('.back-btn') || e.target.closest('.minimap-container')) return;
             e.preventDefault(); 
-            isDragging = true; startX = e.pageX; dragStartScroll = targetScroll; container.style.cursor = 'grabbing';
+            isDraggingMain = true; startX = e.pageX; dragStartScroll = targetScroll; container.style.cursor = 'grabbing';
         });
 
         document.addEventListener('mousemove', (e) => {
-            if(!isDragging) return;
-            e.preventDefault(); 
-            targetScroll = dragStartScroll + (startX - e.pageX) * 2;
-            targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+            if(isDraggingMain) {
+                e.preventDefault(); 
+                targetScroll = dragStartScroll + (startX - e.pageX) * 2;
+                targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+            }
         });
 
-        document.addEventListener('mouseup', () => { isDragging = false; container.style.cursor = 'grab'; });
-        document.addEventListener('mouseleave', () => { isDragging = false; });
+        document.addEventListener('mouseup', () => { 
+            isDraggingMain = false; 
+            isDraggingMini = false;
+            container.style.cursor = 'grab'; 
+        });
 
+        // --- MINIMAP DRAG LOGIC ---
+        miniContainer.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            isDraggingMini = true;
+            // Immediate jump to click position
+            handleMinimapDrag(e);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if(isDraggingMini) {
+                e.preventDefault();
+                handleMinimapDrag(e);
+            }
+        });
+
+        function handleMinimapDrag(e) {
+            const rect = miniContainer.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            // Center the handle on mouse
+            x -= miniHandle.offsetWidth / 2;
+            
+            // Convert pixel on minimap to percentage
+            let percent = x / (rect.width - miniHandle.offsetWidth);
+            percent = Math.max(0, Math.min(1, percent));
+            
+            // Apply to targetScroll
+            targetScroll = percent * maxScroll;
+        }
+
+
+        // Animation Loop
         function animate() {
             currentScroll += (targetScroll - currentScroll) * 0.08; 
             container.style.transform = `translateX(-${currentScroll}px)`;
-            if (maxScroll > 0) progressBar.style.width = `${(currentScroll / maxScroll) * 100}%`;
+            
+            // Update Minimap Handle Position
+            if (maxScroll > 0) {
+                const percent = currentScroll / maxScroll;
+                // Move handle within the available track width (container width - handle width)
+                const trackW = miniContainer.offsetWidth - miniHandle.offsetWidth;
+                const handleX = percent * trackW;
+                miniHandle.style.transform = `translateX(${handleX}px)`;
+            }
+
             requestAnimationFrame(animate);
         }
         animate();
