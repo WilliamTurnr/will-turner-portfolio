@@ -84,36 +84,59 @@
         }
         .back-btn:hover { background: white; color: black; }
 
-        /* --- NEW MINIMAP STYLES --- */
+        /* --- NEW MINIMAP STYLES (MORPHING) --- */
         .minimap-container {
             position: absolute;
-            bottom: 30px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
-            width: 40vw; /* Width of the mini-map on screen */
-            height: 50px;
-            background: rgba(20, 20, 20, 0.8);
-            border: 1px solid #333;
-            border-radius: 4px;
-            overflow: hidden;
-            pointer-events: auto; /* Allow clicking/dragging */
+            width: 40vw; 
+            height: 2px; /* Start as a Line */
+            background: rgba(255, 255, 255, 0.2); /* Subtle line color */
+            border-radius: 2px;
+            
+            /* Interaction Props */
+            pointer-events: auto; 
             z-index: 1000;
             display: flex;
             align-items: center;
+            overflow: visible; /* Let the dot pop out */
+            
+            /* Smooth Morph Transition */
+            transition: 
+                height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                background 0.4s ease,
+                border-radius 0.4s ease,
+                bottom 0.4s ease;
         }
 
-        /* The "Filmstrip" inside the minimap */
+        /* HOVER / ACTIVE STATE (THE POP UP) */
+        .minimap-container:hover,
+        .minimap-container.active {
+            height: 60px; /* Expand to filmstrip */
+            bottom: 30px; /* Shift up slightly */
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #333;
+            border-radius: 4px;
+            overflow: hidden; /* Clip images */
+        }
+
+        /* The Filmstrip Images */
         .minimap-track {
             position: relative;
             width: 100%;
             height: 100%;
             display: flex;
-            opacity: 0.4; /* "Grayed out" look */
-            transition: opacity 0.3s;
+            opacity: 0; /* Hidden in line mode */
+            transition: opacity 0.2s ease;
         }
-        .minimap-container:hover .minimap-track { opacity: 0.6; }
+        .minimap-container:hover .minimap-track,
+        .minimap-container.active .minimap-track {
+            opacity: 0.5;
+            transition-delay: 0.1s; /* Delay until expanded */
+        }
 
-        /* Tiny blocks representing content */
+        /* Blocks */
         .mini-block {
             height: 100%;
             background: #333;
@@ -124,19 +147,46 @@
         .mini-block.img-block { background-size: cover; background-position: center; filter: grayscale(100%); }
         .mini-block.text-block { background: #222; border: 1px solid #444; }
 
-        /* The Draggable "Viewfinder" */
+        /* THE MORPHING HANDLE (DOT -> RECT) */
         .minimap-handle {
             position: absolute;
-            top: 0; left: 0;
-            height: 100%;
-            width: 0px; /* JS will set this */
-            border: 2px solid #fff;
-            background: rgba(255,255,255,0.1);
+            top: 50%;
+            transform: translateY(-50%);
+            
+            /* State 1: DOT */
+            height: 12px;
+            width: 12px !important; /* Force circle size */
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+            border: none;
+            
             cursor: grab;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
             z-index: 10;
+            
+            /* Morph Transition */
+            transition: 
+                width 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-radius 0.4s ease,
+                background 0.4s ease,
+                top 0.4s ease;
         }
-        .minimap-handle:active { cursor: grabbing; background: rgba(255,255,255,0.2); }
+
+        /* State 2: VIEWFINDER (On Hover) */
+        .minimap-container:hover .minimap-handle,
+        .minimap-container.active .minimap-handle {
+            top: 0;
+            transform: translateY(0);
+            height: 100%;
+            width: var(--handle-width) !important; /* JS sets this */
+            border-radius: 0;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #fff;
+            box-shadow: none;
+        }
+
+        .minimap-handle:active { cursor: grabbing; background: rgba(255,255,255,0.2) !important; }
 
 
         /* --- 5. HORIZONTAL LAYOUT ENGINE --- */
@@ -172,7 +222,6 @@
             letter-spacing: -0.5px;
         }
 
-        /* ALIGNMENT FIX */
         .chapter-panel p {
             font-family: var(--font-main); 
             font-weight: 400;
@@ -267,8 +316,7 @@
         <div class="crosshair c-br"></div>
         
         <div class="minimap-container">
-            <div class="minimap-track" id="minimap-track">
-                </div>
+            <div class="minimap-track" id="minimap-track"></div>
             <div class="minimap-handle" id="minimap-handle"></div>
         </div>
     </div>
@@ -391,23 +439,17 @@
         
         let currentScroll = 0; let targetScroll = 0; let maxScroll = 0;
         let isDraggingMain = false; let startX = 0; let dragStartScroll = 0;
-        let isDraggingMini = false; // Dragging the handle
+        let isDraggingMini = false; 
 
         // Initialize Minimap (Generate tiny blocks)
         function initMinimap() {
-            miniTrack.innerHTML = ''; // Clear
+            miniTrack.innerHTML = ''; 
             const panels = document.querySelectorAll('.panel');
-            
-            // Generate visual blocks for each panel
             panels.forEach(panel => {
                 const block = document.createElement('div');
                 block.classList.add('mini-block');
-                
-                // Scale width roughly (percentage of total sections)
-                // We'll use flex to distribute them evenly for now
                 block.style.flex = panel.offsetWidth + ' 0 auto';
                 
-                // Visual Type
                 const img = panel.querySelector('img');
                 if (img) {
                     block.classList.add('img-block');
@@ -423,10 +465,11 @@
             const realWidth = container.scrollWidth - window.innerWidth; 
             maxScroll = Math.max(realWidth, 100); 
             
-            // Update Handle Width relative to Viewport
             const ratio = window.innerWidth / container.scrollWidth;
             const handleW = miniContainer.offsetWidth * ratio;
-            miniHandle.style.width = `${Math.max(handleW, 20)}px`; // Min width 20px
+            
+            // PASS WIDTH TO CSS VARIABLE FOR HOVER EFFECT
+            miniHandle.style.setProperty('--handle-width', `${Math.max(handleW, 20)}px`);
         }
         
         window.addEventListener('load', initMinimap);
@@ -458,6 +501,7 @@
         document.addEventListener('mouseup', () => { 
             isDraggingMain = false; 
             isDraggingMini = false;
+            miniContainer.classList.remove('active'); 
             container.style.cursor = 'grab'; 
         });
 
@@ -465,7 +509,7 @@
         miniContainer.addEventListener('mousedown', (e) => {
             e.preventDefault();
             isDraggingMini = true;
-            // Immediate jump to click position
+            miniContainer.classList.add('active'); // Keep expanded
             handleMinimapDrag(e);
         });
 
@@ -479,14 +523,14 @@
         function handleMinimapDrag(e) {
             const rect = miniContainer.getBoundingClientRect();
             let x = e.clientX - rect.left;
-            // Center the handle on mouse
-            x -= miniHandle.offsetWidth / 2;
             
-            // Convert pixel on minimap to percentage
-            let percent = x / (rect.width - miniHandle.offsetWidth);
+            // Get current width (whether dot or rect)
+            const handleCurrentWidth = miniHandle.offsetWidth;
+            x -= handleCurrentWidth / 2;
+            
+            let percent = x / (rect.width - handleCurrentWidth);
             percent = Math.max(0, Math.min(1, percent));
             
-            // Apply to targetScroll
             targetScroll = percent * maxScroll;
         }
 
@@ -499,10 +543,20 @@
             // Update Minimap Handle Position
             if (maxScroll > 0) {
                 const percent = currentScroll / maxScroll;
-                // Move handle within the available track width (container width - handle width)
-                const trackW = miniContainer.offsetWidth - miniHandle.offsetWidth;
+                const handleW = miniHandle.offsetWidth;
+                const trackW = miniContainer.offsetWidth - handleW;
                 const handleX = percent * trackW;
-                miniHandle.style.transform = `translateX(${handleX}px)`;
+                miniHandle.style.transform = `translate(${handleX}px, -50%)`;
+                
+                // Adjust Y transform if expanded (handled by CSS, but need to ensure translateX is cleaner)
+                // Actually, CSS handles top/transform. 
+                // We just need to set the X variable or property.
+                // Let's use direct style for X, CSS for Y.
+                if(miniContainer.matches(':hover') || miniContainer.classList.contains('active')) {
+                     miniHandle.style.transform = `translateX(${handleX}px)`;
+                } else {
+                     miniHandle.style.transform = `translate(${handleX}px, -50%)`;
+                }
             }
 
             requestAnimationFrame(animate);
